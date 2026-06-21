@@ -29,7 +29,7 @@ Track lifestyle emissions across transport, energy, food, shopping & waste — g
 
 CarbonTrace makes a famously invisible number — your carbon footprint — **visible, trustworthy, and reducible**. It pairs a credible emissions methodology with a genuinely delightful product experience: oversized editorial typography, marquee tickers, animated counters, smooth scroll, and an interactive AI advisor that ranks your highest-impact actions in seconds.
 
-> **Build status — Milestone 1 of 7.** This repo ships the production scaffold, the complete fully-animated marketing site, **and a working Groq-powered AI insights engine**. Auth, database, the full emissions engine, dashboard, gamification, Stripe offsets, reports and teams arrive in later milestones. Every external service is wired behind a **graceful adapter** that runs with zero keys.
+> **Build status — Milestone 1 of 7.** This repo ships the production scaffold, the complete fully-animated marketing site, a working **Groq-powered AI insights engine**, and **Clerk authentication** (modal sign-in/up, user menu, middleware-protected `/app` + `/admin`). The database, full emissions engine, dashboard, gamification, Stripe offsets, reports and teams arrive in later milestones. Every external service is wired behind a **graceful adapter** that runs with zero keys.
 
 ---
 
@@ -74,6 +74,7 @@ GROQ_MODEL=llama-3.3-70b-versatile
 - **Styling** — Tailwind CSS v4 (CSS-first `@theme` tokens) · shadcn / Radix primitives
 - **Motion** — Framer Motion (reveals, counters, carousel) · Lenis smooth scroll
 - **AI** — Groq (all AI operations) via server Route Handlers
+- **Auth** — Clerk (`@clerk/nextjs`) — modal sign-in/up, `UserButton`, middleware-protected routes
 - **Forms & validation** — react-hook-form · Zod (shared client/server schemas)
 - **Email** — Resend adapter (graceful stub)
 - **Testing & tooling** — Vitest · Testing Library · ESLint · Prettier
@@ -88,12 +89,14 @@ pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
-No `.env` is required to explore the app. To enable live AI + email:
-
 ```bash
 cp .env.example .env.local
-# set GROQ_API_KEY (live AI insights) and optionally RESEND_API_KEY (contact email)
+# Auth: set Clerk keys (or run `clerk init` to scaffold them automatically)
+# AI:   set GROQ_API_KEY for live insights (omitted → deterministic samples)
+# Email (optional): RESEND_API_KEY for the contact form
 ```
+
+The marketing site renders without keys; Clerk keys are needed for the sign-in/up flow and the protected `/app` route.
 
 ### Scripts
 
@@ -114,13 +117,14 @@ cp .env.example .env.local
 ```
 app/
   (marketing)/        landing + features · pricing · about · methodology · contact · legal
-  (auth)/             login · signup            (placeholders → Milestone 2)
-  app/                product dashboard          (placeholder → Milestone 3)
-  admin/              admin                      (placeholder)
+  sign-in/ sign-up/   Clerk auth pages (catch-all routes)
+  app/                protected dashboard (Clerk-gated, greets signed-in user)
+  admin/              admin (Clerk-gated → Milestone 7)
   api/
     insights/         Groq-powered AI insights (Zod-validated)
     contact/          contact form → email adapter
   robots.ts · sitemap.ts · layout.tsx · globals.css
+middleware.ts         Clerk middleware — protects /app and /admin
 components/
   ui/                 button · badge · accordion (shadcn/Radix)
   marketing/          Hero · Marquee · StatCounter · Carousel · AiInsightsDemo · cards · Navbar · Footer
@@ -170,7 +174,7 @@ Display type **Space Grotesk**, body **Inter**, indices **JetBrains Mono**. Dot-
 
 1. Push this repo to GitHub.
 2. In Vercel: **New Project → Import** (framework auto-detected as Next.js).
-3. Add environment variables from [`.env.example`](.env.example). For live AI, set `GROQ_API_KEY`. None are required for the marketing site.
+3. Add environment variables from [`.env.example`](.env.example): `GROQ_API_KEY` (live AI), `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` (auth). The Clerk secret is sensitive — set it in Vercel, never commit it.
 4. **Deploy.** `vercel.json` is present for framework config and future cron schedules.
 
 ```bash
@@ -182,8 +186,8 @@ pnpm dlx vercel --prod # production
 
 ## 🗺 Roadmap
 
-- [x] **1 · Scaffold + landing** — design system, full animated marketing site, **Groq AI insights**
-- [ ] **2 · Auth & DB** — Prisma schema, Auth.js (credentials + Google + GitHub), onboarding wizard
+- [x] **1 · Scaffold + landing + auth** — design system, full animated marketing site, **Groq AI insights**, **Clerk authentication**
+- [ ] **2 · Data layer** — Prisma schema + seed, user profiles synced from Clerk, onboarding wizard
 - [ ] **3 · Core product** — emissions engine, activity logging, dashboard, trends, goals
 - [ ] **4 · Engagement** — expanded AI insights, gamification (streaks/badges/challenges), notifications + cron
 - [ ] **5 · Monetization** — Stripe subscriptions + offset marketplace + certificates + PDF reports

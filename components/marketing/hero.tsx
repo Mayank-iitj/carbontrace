@@ -57,7 +57,7 @@ export function Hero() {
             {...rise(0.24)}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
           >
-            <GlowButton href="/signup" size="lg">
+            <GlowButton href="/sign-up" size="lg">
               Start free
             </GlowButton>
             <GlowButton href="/#how-it-works" size="lg" variant="secondary" withArrow={false}>

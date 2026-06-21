@@ -145,7 +145,7 @@ export const pricing = [
       "Community challenges",
     ],
     cta: "Start free",
-    href: "/signup",
+    href: "/sign-up",
     popular: false,
   },
   {
@@ -161,7 +161,7 @@ export const pricing = [
       "Goals, streaks & badges",
     ],
     cta: "Start Pro trial",
-    href: "/signup?plan=pro",
+    href: "/sign-up",
     popular: true,
   },
   {

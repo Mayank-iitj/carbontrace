@@ -13,6 +13,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Pin file-tracing to this project (a lockfile exists in a parent dir too).
+  outputFileTracingRoot: import.meta.dirname,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

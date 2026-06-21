@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import { siteConfig } from "@/lib/site";
@@ -57,9 +58,7 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
@@ -67,7 +66,24 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen antialiased">
-        <SmoothScroll>{children}</SmoothScroll>
+        <ClerkProvider
+          afterSignOutUrl="/"
+          appearance={{
+            variables: {
+              colorPrimary: "#A8FF53",
+              colorBackground: "#121413",
+              borderRadius: "0.75rem",
+              fontFamily: "var(--font-inter)",
+            },
+            elements: {
+              card: "bg-[var(--color-surface)] border border-[var(--color-border)]",
+              formButtonPrimary:
+                "bg-[var(--color-accent)] text-[var(--color-accent-foreground)] hover:brightness-110",
+            },
+          }}
+        >
+          <SmoothScroll>{children}</SmoothScroll>
+        </ClerkProvider>
       </body>
     </html>
   );

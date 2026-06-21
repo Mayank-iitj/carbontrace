@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X, Leaf } from "lucide-react";
+import { SignInButton, SignUpButton, UserButton, Show } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { navLinks, siteConfig } from "@/lib/site";
 import { GlowButton } from "@/components/marketing/glow-button";
+import { Button } from "@/components/ui/button";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -48,15 +50,22 @@ export function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            href="/login"
-            className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
-          >
-            Log in
-          </Link>
-          <GlowButton href="/signup" size="sm" withArrow={false}>
-            Start free
-          </GlowButton>
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]">
+                Log in
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button size="sm">Start free</Button>
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
+            <GlowButton href="/app" size="sm" withArrow={false}>
+              Dashboard
+            </GlowButton>
+            <UserButton />
+          </Show>
         </div>
 
         <button
@@ -83,12 +92,25 @@ export function Navbar() {
               </Link>
             ))}
             <div className="mt-2 flex flex-col gap-3">
-              <Link href="/login" onClick={() => setOpen(false)} className="text-base">
-                Log in
-              </Link>
-              <GlowButton href="/signup" withArrow={false} className="w-full">
-                Start free
-              </GlowButton>
+              <Show when="signed-out">
+                <SignInButton mode="modal">
+                  <button className="text-left text-base text-[var(--color-text-muted)] hover:text-[var(--color-text)]">
+                    Log in
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button className="w-full">Start free</Button>
+                </SignUpButton>
+              </Show>
+              <Show when="signed-in">
+                <GlowButton href="/app" withArrow={false} className="w-full">
+                  Dashboard
+                </GlowButton>
+                <div className="flex items-center gap-3">
+                  <UserButton />
+                  <span className="text-sm text-[var(--color-text-muted)]">Account</span>
+                </div>
+              </Show>
             </div>
           </div>
         </div>
