@@ -93,7 +93,7 @@ export async function GET(_req: NextRequest) {
     }
 
     // AI is enabled, build prompt with actual logged activities summary
-    const activitiesSummary = profile.activities.slice(0, 15).map(act => (
+    const activitiesSummary = profile.activities.slice(0, 15).map((act: { category: string; subCategory: string; amount: number; unit: string; co2eKg: number }) => (
       `- Category: ${act.category}, Subcategory: ${act.subCategory}, Amount: ${act.amount} ${act.unit}, CO2e: ${act.co2eKg.toFixed(1)} kg`
     )).join("\n");
 
