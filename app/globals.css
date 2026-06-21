@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  CarbonTrace design tokens — dark, premium, editorial (climate-tuned) */
+/*  Cloned structure/feel from agenciy.framer.website, original content.  */
+/* ------------------------------------------------------------------ */
+@theme {
+  --color-bg: #0a0b0a;
+  --color-surface: #121413;
+  --color-surface-2: #1a1d1b;
+  --color-text: #f4f5f2;
+  --color-text-muted: #9ca39b;
+  --color-accent: #a8ff53;
+  --color-accent-foreground: #0a0b0a;
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  --radius-card: 1.5rem;
+  --radius-pill: 9999px;
+
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-accordion-down: accordion-down 0.3s var(--ease-reveal);
+  --animate-accordion-up: accordion-up 0.3s var(--ease-reveal);
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Lenis smooth-scroll baseline */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Faint dot-grid background used behind sections (reference pattern). */
+  .bg-dot-grid {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* Soft accent glow for hero / key surfaces. */
+  .glow-accent {
+    box-shadow:
+      0 0 0 1px var(--color-border),
+      0 0 60px -20px rgba(168, 255, 83, 0.35);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Oversized display heading defaults. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
+}
+
+/* Respect reduced-motion globally: kill transforms/animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
