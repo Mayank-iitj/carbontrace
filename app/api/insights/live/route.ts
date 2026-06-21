@@ -38,7 +38,7 @@ export async function GET(_req: NextRequest) {
     }
 
     // Compute basic statistics
-    const totalEmissionsKg = profile.activities.reduce((sum, act) => sum + act.co2eKg, 0);
+    const totalEmissionsKg = profile.activities.reduce((sum: number, act) => sum + act.co2eKg, 0);
     const categoryTotals: Record<string, number> = {};
     for (const act of profile.activities) {
       categoryTotals[act.category] = (categoryTotals[act.category] || 0) + act.co2eKg;

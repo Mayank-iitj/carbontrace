@@ -266,15 +266,15 @@ export default function DashboardPage() {
   }
 
   // Statistics Calculations
-  const currentMonthEmissions = activities.reduce((sum, a) => sum + a.co2eKg, 0);
+  const currentMonthEmissions = activities.reduce((sum: number, a) => sum + a.co2eKg, 0);
   const baselineMonthlyLimit = 650; // Average baseline monthly target in kg
   const monthlyProgressPct = Math.min(100, (currentMonthEmissions / baselineMonthlyLimit) * 100);
 
   const categoryEmissions = {
-    transport: activities.filter((a) => a.category === "transport").reduce((sum, a) => sum + a.co2eKg, 0),
-    energy: activities.filter((a) => a.category === "energy").reduce((sum, a) => sum + a.co2eKg, 0),
-    food: activities.filter((a) => a.category === "food").reduce((sum, a) => sum + a.co2eKg, 0),
-    shopping: activities.filter((a) => a.category === "shopping").reduce((sum, a) => sum + a.co2eKg, 0),
+    transport: activities.filter((a) => a.category === "transport").reduce((sum: number, a) => sum + a.co2eKg, 0),
+    energy: activities.filter((a) => a.category === "energy").reduce((sum: number, a) => sum + a.co2eKg, 0),
+    food: activities.filter((a) => a.category === "food").reduce((sum: number, a) => sum + a.co2eKg, 0),
+    shopping: activities.filter((a) => a.category === "shopping").reduce((sum: number, a) => sum + a.co2eKg, 0),
   };
 
   return (
