@@ -1,0 +1,51 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model UserProfile {
+  id               String           @id @default(cuid())
+  clerkId          String           @unique
+  email            String
+  name             String?
+  region           String           @default("United Kingdom")
+  householdSize    Int              @default(1)
+  diet             String           @default("omnivore")
+  transport        String           @default("petrol-car")
+  targetReduction  Int              @default(20) // e.g. 20% reduction target
+  onboardingComplete Boolean        @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  activities       CarbonActivity[]
+  goals            Goal[]
+}
+
+model CarbonActivity {
+  id          String      @id @default(cuid())
+  userId      String
+  user        UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    String      // "transport" | "energy" | "food" | "shopping"
+  subCategory String      // e.g. "petrol-car", "electricity", "flight"
+  amount      Float       // raw amount (km, kWh, kg, etc.)
+  unit        String      // e.g., "km", "kWh", "meals"
+  co2eKg      Float       // calculated emissions in kg CO2e
+  loggedAt    DateTime    @default(now())
+  notes       String?
+}
+
+model Goal {
+  id            String      @id @default(cuid())
+  userId        String
+  user          UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  category      String
+  targetSaving  Float       // target savings in kg CO2e/year
+  currentSaving Float       @default(0)
+  status        String      // "active" | "achieved" | "abandoned"
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
